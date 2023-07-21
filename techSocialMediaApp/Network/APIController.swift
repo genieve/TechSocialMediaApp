@@ -75,6 +75,52 @@ class APIController {
         return userProfile
     }
     
+    func deletePosts(postId: Int) async throws {
+        let baseURL = "https://tech-social-media-app.fly.dev/post"
+        
+        var urlComponents = URLComponents(string: baseURL)
+        
+        let urlQuery = [URLQueryItem(name: "userSecret", value: User.current?.secret.uuidString),
+                        URLQueryItem(name: "postid", value: String(postId))]
+        urlComponents?.queryItems = urlQuery
+        
+        var urlRequest = URLRequest(url: urlComponents!.url!)
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpMethod = "DELETE"
+        
+        let _ = try await URLSession.shared.data(for: urlRequest)
+        
+    }
+    func editPost(post: Post) async throws {
+        
+        let baseURL = "https://tech-social-media-app.fly.dev/editPost"
+        
+        let urlComponents = URLComponents(string: baseURL)
+        
+        var urlRequest = URLRequest(url: urlComponents!.url!)
+        
+        let jsonEncoder = JSONEncoder()
+        let bodyParameters: [String: Any] = [
+            "userSecret": User.current!.secret.uuidString,
+            "post": [
+                "postid": post.postid,
+                "title": post.title,
+                "body": post.body
+                ] as [String : Any]]
+        
+        let jsonData = try JSONSerialization.data(withJSONObject: bodyParameters, options: .prettyPrinted)
+        
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = jsonData
+        
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else { throw APIError.networkNotReached }
+  
+    }
+    
     
     func createPost(title: String, body: String) async throws -> Post {
         //        1. Create a baseURL
@@ -85,8 +131,6 @@ class APIController {
         
         //        3. add components to the url request
         var urlRequest = URLRequest(url: urlComponents!.url!)
-        
-        
         //        4. Set up the body
         
         //        Taking something from swift and making it usable by json

@@ -40,39 +40,51 @@ class PostAddEditViewController: UIViewController {
         // Do any additional setup after loading the view.
         // If it was tapped to edit, then pre-load it with the current post
     }
-    init?(post: Post?, coder: NSCoder) {
-        self.post = post
-        super.init(coder: coder)
-    }
+//    init?(post: Post?, coder: NSCoder) {
+//        self.post = post
+//    }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
+
     
-    func saveButtonHit() {
-        if let title = titleTextField.text, let body = bodyTextView.text {
-            Task {
-                do {
-                    let apiController = APIController()
-                    let post = try await apiController.createPost(title: title, body: body)
-                }
-                catch {
-                    print(error)
-                }
+    private func createPost(title: String, body: String) {
+        Task {
+            do {
+                let apiController = APIController()
+                let _ = try await apiController.createPost(title: title, body: body)
+                performSegue(withIdentifier: "postUnwind", sender: self)
+            }
+            catch {
+                print(error)
             }
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == "postUnwind" else { return }
-        saveButtonHit()
-        
-        
+    private func editPost(post: Post) {
+        Task {
+            do {
+                let apiController = APIController()
+                let _ = try await apiController.editPost(post: post)
+                performSegue(withIdentifier: "editUnwind", sender: self)
+            }
+            catch {
+                print(error)
+            }
+        }
     }
     
-    
-    
-    
+    @IBAction func postButtonTapped(_ sender: UIButton) {
+        if let title = titleTextField.text, let body = bodyTextView.text {
+            if let post = post {
+                editPost(post: post)
+            } else {
+                createPost(title: title, body: body)
+            }
+        }
+
+    }
     //Add in Posts here, Implementation to
     //Title, text, that's all we need to ADD
     

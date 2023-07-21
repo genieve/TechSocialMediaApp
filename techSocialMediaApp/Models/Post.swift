@@ -24,3 +24,9 @@ struct CreatePostBody: Codable {
     var userSecret: String
     var post: [String: String]
 }
+struct EditPostBody: Codable {
+    var userSecret: String
+    var post: [String: String]
+    var postid: Int
+}
+

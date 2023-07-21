@@ -87,22 +87,50 @@ class PostTableViewController: UITableViewController {
             return PostDetailViewController(coder: coder, post: nil)
         }
     }
-
-    @IBSegueAction func addPost(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
-        return PostAddEditViewController(post: nil, coder: coder)
+    @IBSegueAction func addPostSegue(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
+        return PostAddEditViewController(coder: coder)
     }
+
     
     @IBAction func unwindToPostTableViewController(_ unwindSegue: UIStoryboardSegue) {
-        
-        // Use data from the view controller which initiated the unwind segue
         guard unwindSegue.identifier == "postUnwind", let sourceViewController = unwindSegue.source as? PostAddEditViewController, let post = sourceViewController.post else { return }
-        
         let newIndexPath = IndexPath(row: posts.count, section: 0)
         posts.append(post)
         tableView.insertRows(at: [newIndexPath], with: .automatic)
-        
     }
     
+    
+    func configure(cell: PostTableViewCell, forItemAt indexPath: IndexPath) {
+        let post = posts[indexPath.row]
+        
+        cell.bodyLabel.text = post.body
+        cell.titleLabel.text = post.title
+        cell.userameLabel.text = post.authorUserName
+        cell.dateLabel.text = post.createdDate
+        cell.numLikesLabel.text = "\(post.likes)"
+        
+        cell.numCommentsLabel.text = post.numComments == 1 ? "1 comment" : "\(post.numComments) comments"
+        //assign the cell text to the current post
+    }
+    
+}
+
+//    @IBSegueAction func addPost(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
+//        return PostAddEditViewController(post: nil, coder: coder)
+//
+//    }
+//
+//    @IBAction func unwindToPostTableViewController(_ unwindSegue: UIStoryboardSegue) {
+//        
+//        // Use data from the view controller which initiated the unwind segue
+//        guard unwindSegue.identifier == "postUnwind", let sourceViewController = unwindSegue.source as? PostAddEditViewController, let post = sourceViewController.post else { return }
+//        
+//        let newIndexPath = IndexPath(row: posts.count, section: 0)
+//        posts.append(post)
+//        tableView.insertRows(at: [newIndexPath], with: .automatic)
+//        
+//    }
+//    
     
     
 //    @IBSegueAction func addPost(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
@@ -118,21 +146,4 @@ class PostTableViewController: UITableViewController {
     
     //Call pullPosts, display the posts that you call
     
-    func configure(cell: PostTableViewCell, forItemAt indexPath: IndexPath) {
-        let post = posts[indexPath.row]
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY/MM/dd"
-        // Convert Date to String
 
-        
-        cell.bodyLabel.text = post.body
-        cell.titleLabel.text = post.title
-        cell.userameLabel.text = post.authorUserName
-        cell.dateLabel.text = post.createdDate
-        cell.numLikesLabel.text = "\(post.likes)"
-        
-        cell.numCommentsLabel.text = post.numComments == 1 ? "1 comment" : "\(post.numComments) comments"
-        //assign the cell text to the current post
-    }
-    
-}
