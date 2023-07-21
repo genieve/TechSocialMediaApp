@@ -120,11 +120,15 @@ class PostTableViewController: UITableViewController {
     
     func configure(cell: PostTableViewCell, forItemAt indexPath: IndexPath) {
         let post = posts[indexPath.row]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YY/MM/dd"
+        // Convert Date to String
+
         
         cell.bodyLabel.text = post.body
         cell.titleLabel.text = post.title
         cell.userameLabel.text = post.authorUserName
-//        cell.dateLabel.text = "\(post.createdDate.formatted(.dateTime))"
+        cell.dateLabel.text = post.createdDate
         cell.numLikesLabel.text = "\(post.likes)"
         
         cell.numCommentsLabel.text = post.numComments == 1 ? "1 comment" : "\(post.numComments) comments"
