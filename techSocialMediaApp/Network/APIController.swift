@@ -95,24 +95,25 @@ class APIController {
         
 //        Make a struct that you access and pass in instead of a dictionary up above
         
-            let jsonData = try jsonEncoder.encode(bodyParameters)
-            
-            urlRequest.httpMethod = "POST"
-            urlRequest.httpBody = jsonData
+        let jsonData = try jsonEncoder.encode(bodyParameters)
+        print(String(decoding: jsonData, as: UTF8.self))
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = jsonData
             
             //        5. Send the data to the server
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
             
             //        6. Checking if it's successful
-            guard let httpResponse = response as? HTTPURLResponse,
+        guard let httpResponse = response as? HTTPURLResponse,
             httpResponse.statusCode == 200 else { throw APIError.networkNotReached }
             
             //        7. Making the data reusable by decoding it
-            let decoder = JSONDecoder()
-            let post = try decoder.decode(Post.self, from: data)
+        let decoder = JSONDecoder()
+        let post = try decoder.decode(Post.self, from: data)
             
             //        8. Return decoded data
-            return post
+        return post
         
     }
     

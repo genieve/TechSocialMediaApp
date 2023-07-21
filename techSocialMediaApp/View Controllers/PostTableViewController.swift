@@ -60,13 +60,23 @@ class PostTableViewController: UITableViewController {
     
 //      MARK --
     override func viewWillAppear(_ animated: Bool) {
-        
+        Task {
+            do {
+                let apiController = APIController()
+                
+                let fetchedPosts = try await apiController.getAllPosts()
+                
+                posts = fetchedPosts
+                
+                tableView.reloadData()
+                
+            } catch {
+                print(error)
+            }
+        }
     }
     
     // One of these - This is where we check to see if the post is already in the array of posts or not - if the post.id and the user are the same, then we EDIT the current post, otherwise we .append to the posts array
-    func didCreatePost(_ post: Post) {
-        tableView.reloadData()
-    }
      
     @IBSegueAction func showDetailView(_ coder: NSCoder, sender: Any?) -> PostDetailViewController? {
         if let cell = sender as? PostTableViewCell, let indexPath = tableView.indexPath(for: cell) {
@@ -78,14 +88,23 @@ class PostTableViewController: UITableViewController {
         }
     }
 
-    @IBAction func addPost(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let saveButtonHitVC = storyboard.instantiateViewController(withIdentifier: "PostAddEditViewController") as? PostAddEditViewController {
-                    saveButtonHitVC.post = nil
-                    navigationController?.pushViewController(saveButtonHitVC, animated: true)
-                }
-
+    @IBSegueAction func addPost(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
+        return PostAddEditViewController(post: nil, coder: coder)
     }
+    
+    @IBAction func unwindToPostTableViewController(_ unwindSegue: UIStoryboardSegue) {
+        
+        // Use data from the view controller which initiated the unwind segue
+        guard unwindSegue.identifier == "postUnwind", let sourceViewController = unwindSegue.source as? PostAddEditViewController, let post = sourceViewController.post else { return }
+        
+        let newIndexPath = IndexPath(row: posts.count, section: 0)
+        posts.append(post)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+        
+    }
+    
+    
+    
 //    @IBSegueAction func addPost(_ coder: NSCoder, sender: Any?) -> PostAddEditViewController? {
 //        let saveButtonHitVC = PostAddEditViewController(post: nil, coder: coder)
 //        saveButtonHitVC?.delegate = self // Set the delegate to receive the created post
@@ -105,8 +124,9 @@ class PostTableViewController: UITableViewController {
         cell.bodyLabel.text = post.body
         cell.titleLabel.text = post.title
         cell.userameLabel.text = post.authorUserName
-//        cell.dateLabel.text = post.createdDate.formatted(date: .abbreviated, time: .shortened)
+//        cell.dateLabel.text = "\(post.createdDate.formatted(.dateTime))"
         cell.numLikesLabel.text = "\(post.likes)"
+        
         cell.numCommentsLabel.text = post.numComments == 1 ? "1 comment" : "\(post.numComments) comments"
         //assign the cell text to the current post
     }

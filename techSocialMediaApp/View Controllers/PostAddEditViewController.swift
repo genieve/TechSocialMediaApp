@@ -18,7 +18,7 @@ class PostAddEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleTextField.text = "Testing"
-        bodyTextView.text = "PLEASE SHOW UP SDKFLJDSF"
+        bodyTextView.text = "What would you like to write?"
         
         if let post = post {
             titleTextField.text = post.title
@@ -49,10 +49,8 @@ class PostAddEditViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @IBAction func saveButtonHit(_ sender: Any) {
+    func saveButtonHit() {
         if let title = titleTextField.text, let body = bodyTextView.text {
-//            var createBody = CreatePostBody(userSecret: User.current!.secret.uuidString, post: [title: body])
-//              That ^^^ is already called in the APIController
             Task {
                 do {
                     let apiController = APIController()
@@ -63,8 +61,15 @@ class PostAddEditViewController: UIViewController {
                 }
             }
         }
-        navigationController?.popViewController(animated: true)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "postUnwind" else { return }
+        saveButtonHit()
+        
+        
+    }
+    
     
     
     

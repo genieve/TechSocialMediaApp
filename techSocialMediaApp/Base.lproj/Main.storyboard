@@ -291,7 +291,7 @@
                                             <outlet property="roundedBackgroundView" destination="aD5-UR-OEe" id="I8L-aL-uc6"/>
                                             <outlet property="titleLabel" destination="DRa-1b-Ofr" id="zUA-ME-BBv"/>
                                             <outlet property="userameLabel" destination="zfC-1F-xZs" id="bh8-xi-Wzs"/>
-                                            <segue destination="Vq5-GW-BjM" kind="showDetail" trigger="accessoryAction" destinationCreationSelector="showEdit:" id="yKb-pI-kJ3"/>
+                                            <segue destination="IfY-qH-jog" kind="presentation" id="Ld2-oR-7nY"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -478,7 +478,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="loz-Ap-SsF">
                             <color key="tintColor" red="0.59221604719999998" green="0.44607225090000002" blue="0.70235156720000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <action selector="addPost:" destination="aP6-b0-T4I" id="dga-jx-stI"/>
+                                <segue destination="IfY-qH-jog" kind="presentation" identifier="addPost" id="nLE-hm-r0k"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -497,7 +497,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="2lU-cd-2lx">
-                                <rect key="frame" x="20" y="20" width="350" height="794"/>
+                                <rect key="frame" x="20" y="76" width="350" height="738"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e5z-HX-b5R">
                                         <rect key="frame" x="0.0" y="0.0" width="265.33333333333331" height="62.333333333333336"/>
@@ -509,7 +509,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose a title for your post..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oxt-0z-YpC">
-                                                <rect key="frame" x="0.0" y="28.333333333333336" width="215.33333333333334" height="34"/>
+                                                <rect key="frame" x="0.0" y="28.333333333333329" width="215.33333333333334" height="34"/>
                                                 <color key="backgroundColor" red="0.97758800379999999" green="0.97612112569999998" blue="0.9871227118" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -522,7 +522,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="8De-m0-gFn">
-                                        <rect key="frame" x="0.0" y="82.333333333333314" width="350" height="711.66666666666674"/>
+                                        <rect key="frame" x="0.0" y="82.333333333333314" width="350" height="655.66666666666674"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Body:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I67-i5-o3F">
                                                 <rect key="frame" x="0.0" y="0.0" width="44" height="20.333333333333332"/>
@@ -531,7 +531,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="aRE-A7-xA4">
-                                                <rect key="frame" x="0.0" y="40.333333333333314" width="350" height="671.33333333333348"/>
+                                                <rect key="frame" x="0.0" y="40.333333333333314" width="350" height="615.33333333333348"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                 <color key="textColor" systemColor="labelColor"/>
@@ -559,6 +559,9 @@
                     <navigationItem key="navigationItem" id="7VA-0M-kLg">
                         <barButtonItem key="rightBarButtonItem" title="Post" id="bj8-sT-8ID">
                             <color key="tintColor" red="0.59221604719999998" green="0.44607225090000002" blue="0.70235156720000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="3Ok-tV-M5o" kind="unwind" identifier="postUnwind" unwindAction="unwindToPostTableViewController:" id="gn6-Zg-nMf"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -567,8 +570,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QHk-In-ROe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="3Ok-tV-M5o" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3318" y="1054"/>
+            <point key="canvasLocation" x="4185" y="1064"/>
         </scene>
         <!--Title Of Post-->
         <scene sceneID="mMv-pX-rZ9">
@@ -666,7 +670,28 @@
             </objects>
             <point key="canvasLocation" x="2389.2307692307691" y="382.46445497630327"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5UN-TF-rlp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IfY-qH-jog" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8vo-x9-ccL">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Vq5-GW-BjM" kind="relationship" relationship="rootViewController" destinationCreationSelector="addPost:sender:" id="5ty-sM-IDI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vsx-Cm-VSE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3317" y="1064"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="nLE-hm-r0k"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="house" catalog="system" width="128" height="104"/>
